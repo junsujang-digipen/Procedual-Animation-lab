@@ -1,0 +1,29 @@
+[33mcommit 60259845943861907a9f440092a0471dcc30a2e9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m
+Author: Junsu Jang <65064387+junsujang-digipen@users.noreply.github.com>
+Date:   Mon Nov 10 16:06:23 2025 +0900
+
+    Scene class, ImGui setup
+
+[33mcommit e020af8a7cb627aecb1b95f7116ef6569ecbb441[m
+Author: Junsu Jang <65064387+junsujang-digipen@users.noreply.github.com>
+Date:   Sat Nov 8 01:40:56 2025 +0900
+
+    init tentacle data, move
+
+[33mcommit fef4754c7433d5c9830508d5dd5a0737aa54be9b[m
+Author: Junsu Jang <65064387+junsujang-digipen@users.noreply.github.com>
+Date:   Fri Nov 7 18:10:34 2025 +0900
+
+    SFML window setup and implement FABRIK function
+
+[33mcommit 02cc309ac955a077b95fca4a03196eed0b6b9729[m
+Author: Junsu Jang <65064387+junsujang-digipen@users.noreply.github.com>
+Date:   Fri Nov 7 00:17:17 2025 +0900
+
+    add SFML submodule
+
+[33mcommit aef9913c6df241c9e042c754e62950fc99cd50d7[m
+Author: Junsu Jang <65064387+junsujang-digipen@users.noreply.github.com>
+Date:   Fri Nov 7 00:13:46 2025 +0900
+
+    project solution

@@ -11,14 +11,12 @@ void FABRIK(const sf::Vector2f targetPoint, std::vector<sf::Vector2f>& points, c
 		// Forward reaching
 		points.back() = targetPoint;
 		for (int j = TO_INT(points.size()) - 2; j >= 0; --j) {
-			auto dir = points[j] - points[j + 1];
-			points[j] = DistanceConstraint(points[j + 1], dir, distances[j]);
+			DistanceConstraint(points[j + 1], points[j], distances[j]);
 		}
 		// Backward reaching
 		points.front() = stPoint;
 		for (int j = 1; j < points.size(); ++j) {
-			auto dir = points[j] - points[j - 1];
-			points[j] = DistanceConstraint(points[j - 1], dir, distances[j - 1]);
+			DistanceConstraint(points[j - 1], points[j], distances[j - 1]);
 		}
 		// end check
 		if ((points.back() - targetPoint).length() <= availableDist) {

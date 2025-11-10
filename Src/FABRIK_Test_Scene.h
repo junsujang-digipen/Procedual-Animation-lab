@@ -18,9 +18,11 @@ class FABRIK_Test_Scene : public Scene {
 		sf::Vertex position[2];
 	};
 	std::vector<SimpleLine> lines{};
+	//interactions
+	int selectedIdx{};
 private:
 	const sf::Vector2f OFFSET() const { return { POINT_RADIUS, POINT_RADIUS }; };
-
+	void FABRIK_Step(int num);
 public:
 	FABRIK_Test_Scene(sf::RenderWindow* window);
 	~FABRIK_Test_Scene() override;

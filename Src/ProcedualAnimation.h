@@ -7,3 +7,7 @@ inline const sf::Vector2f DistanceConstraint(const sf::Vector2f& FixedPoints, co
 {
 	return FixedPoints + direction.normalized() * distance;
 }
+inline void DistanceConstraint(const sf::Vector2f& FixedPoints, sf::Vector2f& target, const float distance)
+{
+	target = DistanceConstraint(FixedPoints, target - FixedPoints, distance);
+}
