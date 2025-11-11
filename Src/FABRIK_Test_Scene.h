@@ -30,5 +30,4 @@ public:
 	void UpdateImGui() override;
 	void Draw() override;
 	void Update(const float dt)override;
-
 };

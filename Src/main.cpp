@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "FABRIK_Test_Scene.h"
+#include "PA_Scene.h"
 
 int main() {
 	// create window
@@ -16,7 +17,7 @@ int main() {
 	sf::Cursor cursor(sf::Cursor::Type::Arrow);
 	window.setMouseCursor(cursor);
 	// scene setup
-	std::shared_ptr<Scene> currentScene = std::make_shared<FABRIK_Test_Scene>(&window);
+	std::shared_ptr<Scene> currentScene = std::make_shared<PA_Scene>(&window);
 	// setup FPS counter, deltaTime
 	sf::Clock clock;
 	clock.start();

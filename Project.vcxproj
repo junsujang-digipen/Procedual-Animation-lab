@@ -160,10 +160,14 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui\imgui-SFML.cpp" />
+    <ClCompile Include="Src\Segment.cpp" />
     <ClCompile Include="SFML-IMGUI\imgui-SFML.cpp" />
+    <ClCompile Include="Src\DDLongLegs.cpp" />
     <ClCompile Include="Src\FABRIK_Test_Scene.cpp" />
     <ClCompile Include="Src\main.cpp" />
+    <ClCompile Include="Src\PA_Scene.cpp" />
     <ClCompile Include="Src\ProcedualAnimation.cpp" />
+    <ClCompile Include="Src\Tentacle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="SFML\build\src\SFML\Audio\sfml-audio.vcxproj">
@@ -192,9 +196,13 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="imgui\imgui-SFML.h" />
     <ClInclude Include="imgui\imgui-SFML_export.h" />
+    <ClInclude Include="Src\DDLongLegs.h" />
     <ClInclude Include="Src\FABRIK_Test_Scene.h" />
+    <ClInclude Include="Src\PA_Scene.h" />
     <ClInclude Include="Src\ProcedualAnimation.h" />
     <ClInclude Include="Src\Scene.h" />
+    <ClInclude Include="Src\Segment.h" />
+    <ClInclude Include="Src\Tentacle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,24 @@
 #include "ProcedualAnimation.h"
-
+#include "Segment.h"
 #define TO_FLOAT(x) static_cast<float>(x)
 #define TO_INT(x) static_cast<int>(x)
+
+// TODO: compute segment angle for angle restriction
+void ForwardReaching(std::vector<Segment>& segments, sf::Vector2f targetPosition, const float distance)
+{
+	segments.back().setPosition(targetPosition);
+	for (int i = segments.size() - 2;i >= 0 ; --i) {
+		segments[i].setPosition(GetDistanceConstraint(segments[i+1].getPosition(), segments[i].getPosition(), distance));
+	}
+}
+
+void BackwardReaching(std::vector<Segment>& segments, sf::Vector2f targetPosition, const float distance)
+{
+	segments.front().setPosition(targetPosition);
+	for (int i = 1;i < segments.size(); ++i) {
+		segments[i].setPosition(GetDistanceConstraint(segments[i-1].getPosition(), segments[i].getPosition(), distance));
+	}
+}
 
 void FABRIK(const sf::Vector2f targetPoint, std::vector<sf::Vector2f>& points, const std::vector<float>& distances, const int maxIteration, const float availableDist)
 {

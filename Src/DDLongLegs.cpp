@@ -1,0 +1,85 @@
+
+#include "DDLongLegs.h"
+#include <cmath>
+#include <random>
+
+
+//? random
+std::random_device rd;
+std::mt19937 gen(rd());
+std::uniform_real_distribution<float> distAngle(0.f, 360.f);
+std::uniform_real_distribution<float> distDist(100.f, 220.f);
+std::uniform_real_distribution<float> distPercentage(0.f, 1.f);
+
+DDLongLegs::DDLongLegs(sf::Vector2f position, int legNum):_center(position), _legs(legNum, Tentacle(10, 20))
+{
+	// random st point
+	for (int i = 0;i < _legs.size(); ++i) {
+		float x = std::cosf(sf::radians(distAngle(gen)).asRadians());
+		float y = std::sinf(sf::radians(distAngle(gen)).asRadians());
+		_legs[i].SetTarget(_center + sf::Vector2f{ x,y } *distDist(gen));
+		_legs[i].Reaching(_center + sf::Vector2f{ x,y } *distDist(gen));
+	}
+}
+
+
+
+void DDLongLegs::Draw(sf::RenderWindow* window)
+{
+	sf::Vertex line[2]{ {},{} };
+	line[0].color = sf::Color::Red;
+	line[1].color = sf::Color::Red;
+	line[0].position = _center;
+	line[1].position = _targetPosition;
+	window->draw(line, 2, sf::PrimitiveType::Lines);
+
+	constexpr float size = 20.f;
+	sf::CircleShape body(size);
+	body.setOrigin(sf::Vector2f{ size,size });
+	body.setPosition(_center);
+	window->draw(body);
+
+	constexpr float jointSize = 5.f;
+	sf::CircleShape joint(jointSize);
+	joint.setOrigin(sf::Vector2f{ jointSize,jointSize });
+	for (int i = 0;i < _legs.size(); ++i) {
+		line[0].position = _legs[i].GetToeSegment().getPosition();
+		line[1].position = _legs[i].GetTarget();
+		window->draw(line, 2, sf::PrimitiveType::Lines);
+		for (auto& l : _legs[i].GetSegments()) {
+			joint.setPosition(l.getPosition());
+			window->draw(joint);
+		}
+	}
+}
+
+void DDLongLegs::Update(float dt)
+{
+	// try catching holdable point
+	auto direction = (_targetPosition - _center).normalized();
+	sf::Vector2f pulling{};
+	for (int i = 0;i < _legs.size(); ++i) {
+		if (_legs[i].TryCatching(tentacleSpeed,dt)) {
+			auto totoe = _legs[i].GetToeSegment().getPosition() - _center;
+			auto dotRes = direction.dot(totoe);
+			if (dotRes == 0) continue;
+			pulling += dotRes > 0 ? totoe.normalized() * pullingPower : -totoe.normalized() * pushingPower;
+		}
+		// reset holdable point
+		auto probability = distPercentage(gen);
+		if (probability < probabilityResetTarget) {
+			auto angle = sf::radians(distAngle(gen)).asRadians();
+			float x = std::cosf(angle);
+			float y = std::sinf(angle);
+			_legs[i].SetTarget(_center + sf::Vector2f{ x,y } *distDist(gen));
+		}
+	}
+	// pulling & pushing body
+	if ((_center - _targetPosition).length() > 0.1f && pulling.length() > 0) {
+		_center = _center + pulling * bodySpeed * dt;
+		for (int i = 0;i < _legs.size(); ++i) {
+			_legs[i].Following(_center);
+		}
+	}
+}
+
