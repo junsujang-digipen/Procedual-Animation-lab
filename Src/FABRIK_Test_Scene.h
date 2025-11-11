@@ -18,6 +18,7 @@ class FABRIK_Test_Scene : public Scene {
 		sf::Vertex position[2];
 	};
 	std::vector<SimpleLine> lines{};
+	sf::CircleShape endPoint{};
 	//interactions
 	int selectedIdx{};
 private:
