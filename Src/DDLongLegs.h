@@ -16,7 +16,9 @@ public:
 	void Update(float dt);
 	const sf::Vector2f& GetCenter() { return _center; }
 	void SetTarget(const sf::Vector2f targetPosition) { _targetPosition = targetPosition; }
-
+	void SearchHoldablePoints();
+private:
+	void SearchHoldablePointForALeg(int i);
 public: // constants for ImGui
 	float pullingPower{ 1.f };
 	float pushingPower{ 0.1f };

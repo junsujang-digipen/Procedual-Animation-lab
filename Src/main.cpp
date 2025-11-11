@@ -43,6 +43,13 @@ int main() {
 		}
 		// ImGui update
 		ImGui::SFML::Update(window, sf::seconds(dt));
+		ImGui::BeginMainMenuBar();
+		if (ImGui::BeginMenu("Scene")) {
+			if (ImGui::MenuItem("FABRIK test scene")) { currentScene = std::make_shared<FABRIK_Test_Scene>(&window); }
+			if (ImGui::MenuItem("Tentacle creature scene")) { currentScene = std::make_shared<PA_Scene>(&window); }
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
 		currentScene->UpdateImGui();
 		// rendering
 		window.clear(sf::Color::Black);

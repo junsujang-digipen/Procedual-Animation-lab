@@ -68,10 +68,7 @@ void DDLongLegs::Update(float dt)
 		// reset holdable point
 		auto probability = distPercentage(gen);
 		if (probability < probabilityResetTarget) {
-			auto angle = sf::radians(distAngle(gen)).asRadians();
-			float x = std::cosf(angle);
-			float y = std::sinf(angle);
-			_legs[i].SetTarget(_center + sf::Vector2f{ x,y } *distDist(gen));
+			SearchHoldablePointForALeg(i);
 		}
 	}
 	// pulling & pushing body
@@ -81,5 +78,20 @@ void DDLongLegs::Update(float dt)
 			_legs[i].Following(_center);
 		}
 	}
+}
+
+void DDLongLegs::SearchHoldablePoints()
+{
+	for (int i = 0;i < _legs.size(); ++i) {
+		SearchHoldablePointForALeg(i);
+	}
+}
+
+void DDLongLegs::SearchHoldablePointForALeg(int i)
+{
+	auto angle = sf::radians(distAngle(gen)).asRadians();
+	float x = std::cosf(angle);
+	float y = std::sinf(angle);
+	_legs[i].SetTarget(_center + sf::Vector2f{ x,y } *distDist(gen));
 }
 
