@@ -18,10 +18,13 @@ IK, 절차적 애니메이션 실험실
   - Left-click a joint/end effector to drag it.
   - Buttons: `Generate joint`, `Delete joint`
   - Slider: `Following speed`
+  ![Tentacle Creature Demo](./FABRIK.gif)
 - **Tentacle Scene | 촉수 씬**
   - Left-click in the window to move the creature’s target.
   - Buttons: `Searching holdable point`
   - Sliders: body/tentacle speed, pulling/pushing power, retarget probability.
+  ![Tentacle Creature Demo](./Tentacle.gif)
+
 
 ## TODOs
 - Angle/constraint limits for segments
