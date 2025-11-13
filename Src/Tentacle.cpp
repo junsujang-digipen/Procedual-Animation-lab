@@ -4,7 +4,7 @@
 
 
 
-constexpr float error = 0.1f;
+constexpr float error = 3.f;
 Tentacle::Tentacle(int jointNum, float length) : _segments(jointNum), _length(length)
 {
 	if(jointNum < 2)
@@ -12,6 +12,11 @@ Tentacle::Tentacle(int jointNum, float length) : _segments(jointNum), _length(le
 	for (int i = 0;i < jointNum;++i) {
 		_segments[i].setPosition(sf::Vector2f{0.f,length*i});
 	}
+}
+
+const bool Tentacle::IsReached() const
+{
+	return (_segments.back().getPosition() - _targetPosition).lengthSquared() <= error;
 }
 
 void Tentacle::SetTarget(const sf::Vector2f& targetPosition)
@@ -27,17 +32,21 @@ void Tentacle::Following(const sf::Vector2f& bodyPosition)
 const bool Tentacle::TryCatching(const float speed, const float dt)
 {
 	auto curr = _segments.back().getPosition();
-	auto direction = (_targetPosition - curr);
+	const auto direction = (_targetPosition - curr);
 	if (direction.length() < speed*dt) {
 		curr = _targetPosition;
 	}
 	else {
 		curr += direction.normalized() * speed * dt;
 	}
-	return Reaching(curr) && curr == _targetPosition;
+	Reaching(curr);
+	// is animation end, no more advancing
+	auto lastDistance = direction.lengthSquared();
+	auto currDistance = (_targetPosition - _segments.back().getPosition()).lengthSquared();
+	return abs(currDistance - lastDistance) < error;
 }
 
-const bool Tentacle::Reaching(const sf::Vector2f& currStepPosition)
+const void Tentacle::Reaching(const sf::Vector2f& currStepPosition)
 {
 	//FABRIK
 	sf::Vector2f fixedPoint{_segments.front().getPosition()};
@@ -45,9 +54,8 @@ const bool Tentacle::Reaching(const sf::Vector2f& currStepPosition)
 		ForwardReaching(_segments, currStepPosition, _length);
 		BackwardReaching(_segments, fixedPoint, _length);
 		// end check
-		if ((_segments.back().getPosition() - currStepPosition).length() <= error) {
-			return true;
+		if ((_segments.back().getPosition() - currStepPosition).lengthSquared() <= error) {
+			return;
 		}
 	}
-	return false;
 }

@@ -3,6 +3,12 @@
 #include <cmath>
 #include <random>
 
+// TODO: finding holdable position algorithm
+// TODO: Gravity
+// TODO: holdable obstacle
+// TODO: state controlling
+// TODO: hunting state
+// TODO: code refactoring
 
 //? random
 std::random_device rd;
@@ -14,12 +20,7 @@ std::uniform_real_distribution<float> distPercentage(0.f, 1.f);
 DDLongLegs::DDLongLegs(sf::Vector2f position, int legNum):_center(position), _legs(legNum, Tentacle(10, 20))
 {
 	// random st point
-	for (int i = 0;i < _legs.size(); ++i) {
-		float x = std::cosf(sf::radians(distAngle(gen)).asRadians());
-		float y = std::sinf(sf::radians(distAngle(gen)).asRadians());
-		_legs[i].SetTarget(_center + sf::Vector2f{ x,y } *distDist(gen));
-		_legs[i].Reaching(_center + sf::Vector2f{ x,y } *distDist(gen));
-	}
+	SearchHoldablePoints();
 }
 
 
@@ -50,6 +51,10 @@ void DDLongLegs::Draw(sf::RenderWindow* window)
 			joint.setPosition(l.getPosition());
 			window->draw(joint);
 		}
+		if (_legs[i].IsReached()) joint.setFillColor(sf::Color::Green);
+		else joint.setFillColor(sf::Color::Red);
+		window->draw(joint);
+		joint.setFillColor(sf::Color::White);
 	}
 }
 
@@ -59,20 +64,26 @@ void DDLongLegs::Update(float dt)
 	auto direction = (_targetPosition - _center).normalized();
 	sf::Vector2f pulling{};
 	for (int i = 0;i < _legs.size(); ++i) {
-		if (_legs[i].TryCatching(tentacleSpeed,dt)) {
+		auto isAnimationEnd = _legs[i].TryCatching(tentacleSpeed, dt);
+		if (isAnimationEnd == false) continue;
+		if (_legs[i].IsReached()) {
 			auto totoe = _legs[i].GetToeSegment().getPosition() - _center;
 			auto dotRes = direction.dot(totoe);
 			if (dotRes == 0) continue;
 			pulling += dotRes > 0 ? totoe.normalized() * pullingPower : -totoe.normalized() * pushingPower;
+
+			// reset holding point
+			auto probability = distPercentage(gen);
+			if (probability < probabilityResetTarget) {
+				SearchHoldablePointForALeg(i);
+			}
 		}
-		// reset holdable point
-		auto probability = distPercentage(gen);
-		if (probability < probabilityResetTarget) {
+		else{
 			SearchHoldablePointForALeg(i);
 		}
 	}
 	// pulling & pushing body
-	if ((_center - _targetPosition).length() > 0.1f && pulling.length() > 0) {
+	if ((_center - _targetPosition).lengthSquared() > 10.f && pulling.lengthSquared() > 0) {
 		_center = _center + pulling * bodySpeed * dt;
 		for (int i = 0;i < _legs.size(); ++i) {
 			_legs[i].Following(_center);
