@@ -4,6 +4,7 @@
 #include <random>
 
 // TODO: finding holdable position algorithm
+// TODO: jittering
 // TODO: Gravity
 // TODO: holdable obstacle
 // TODO: state controlling
@@ -83,8 +84,10 @@ void DDLongLegs::Update(float dt)
 		}
 	}
 	// pulling & pushing body
-	if ((_center - _targetPosition).lengthSquared() > 10.f && pulling.lengthSquared() > 0) {
-		_center = _center + pulling * bodySpeed * dt;
+	auto movePower = pulling * bodySpeed * dt;
+	auto MovePowerLeng = movePower.lengthSquared();
+	if (MovePowerLeng > 0 && (_center - _targetPosition).lengthSquared() > MovePowerLeng) {
+		_center = _center + movePower;
 		for (int i = 0;i < _legs.size(); ++i) {
 			_legs[i].Following(_center);
 		}
