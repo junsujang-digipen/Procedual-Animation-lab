@@ -54,6 +54,9 @@
     <ClCompile Include="Src\Segment.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Simulator.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\ProcedualAnimation.h">
@@ -102,6 +105,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Src\Segment.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Simulator.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

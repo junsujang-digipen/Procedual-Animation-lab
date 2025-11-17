@@ -15,7 +15,6 @@
 std::random_device rd;
 std::mt19937 gen(rd());
 std::uniform_real_distribution<float> distAngle(0.f, 360.f);
-std::uniform_real_distribution<float> distDist(100.f, 220.f);
 std::uniform_real_distribution<float> distPercentage(0.f, 1.f);
 
 DDLongLegs::DDLongLegs(sf::Vector2f position, int legNum):_center(position), _legs(legNum, Tentacle(10, 20))
@@ -76,11 +75,11 @@ void DDLongLegs::Update(float dt)
 			// reset holding point
 			auto probability = distPercentage(gen);
 			if (probability < probabilityResetTarget) {
-				SearchHoldablePointForALeg(i);
+				SearchHoldablePointForALeg(i,_legs[i].GetToeSegment().getPosition(), 50,100);
 			}
 		}
 		else{
-			SearchHoldablePointForALeg(i);
+			SearchHoldablePointForALeg(i, _center);
 		}
 	}
 	// pulling & pushing body
@@ -97,15 +96,16 @@ void DDLongLegs::Update(float dt)
 void DDLongLegs::SearchHoldablePoints()
 {
 	for (int i = 0;i < _legs.size(); ++i) {
-		SearchHoldablePointForALeg(i);
+		SearchHoldablePointForALeg(i, _center);
 	}
 }
 
-void DDLongLegs::SearchHoldablePointForALeg(int i)
+void DDLongLegs::SearchHoldablePointForALeg(int i, const sf::Vector2f& center, const float minRad, const float maxRad)
 {
 	auto angle = sf::radians(distAngle(gen)).asRadians();
 	float x = std::cosf(angle);
 	float y = std::sinf(angle);
-	_legs[i].SetTarget(_center + sf::Vector2f{ x,y } *distDist(gen));
+	std::uniform_real_distribution<float> distDist(minRad, maxRad);
+	_legs[i].SetTarget(center + sf::Vector2f{ x,y } *distDist(gen));
 }
 

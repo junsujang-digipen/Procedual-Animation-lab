@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)　;SFML_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)SFML\include;$(ProjectDir)imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SFML\include;$(ProjectDir)imgui;$(ProjectDir)box2d\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -98,7 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)　;SFML_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)SFML\include;$(ProjectDir)imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SFML\include;$(ProjectDir)imgui;$(ProjectDir)box2d\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)　;SFML_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)SFML\include;$(ProjectDir)imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SFML\include;$(ProjectDir)imgui;$(ProjectDir)box2d\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -140,7 +140,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)　;SFML_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)SFML\include;$(ProjectDir)imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SFML\include;$(ProjectDir)imgui;$(ProjectDir)box2d\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -167,9 +167,13 @@
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\PA_Scene.cpp" />
     <ClCompile Include="Src\ProcedualAnimation.cpp" />
+    <ClCompile Include="Src\Simulator.cpp" />
     <ClCompile Include="Src\Tentacle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="box2d\build\src\box2d.vcxproj">
+      <Project>{5d595cab-ef50-303a-b019-fd5a10317b31}</Project>
+    </ProjectReference>
     <ProjectReference Include="SFML\build\src\SFML\Audio\sfml-audio.vcxproj">
       <Project>{3683af6b-504d-3953-8eef-52b243034e7a}</Project>
     </ProjectReference>
@@ -202,6 +206,7 @@
     <ClInclude Include="Src\ProcedualAnimation.h" />
     <ClInclude Include="Src\Scene.h" />
     <ClInclude Include="Src\Segment.h" />
+    <ClInclude Include="Src\Simulator.h" />
     <ClInclude Include="Src\Tentacle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

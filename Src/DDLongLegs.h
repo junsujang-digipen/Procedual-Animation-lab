@@ -18,11 +18,11 @@ public:
 	void SetTarget(const sf::Vector2f targetPosition) { _targetPosition = targetPosition; }
 	void SearchHoldablePoints();
 private:
-	void SearchHoldablePointForALeg(int i);
+	void SearchHoldablePointForALeg(int i, const sf::Vector2f& center, const float minRad = 100.f, const float maxRad = 220.f);
 public: // constants for ImGui
 	float pullingPower{ 1.f };
 	float pushingPower{ 0.1f };
 	float bodySpeed{ 100.f };
 	float tentacleSpeed{ 300.f };
-	float probabilityResetTarget{0.005f};
+	float probabilityResetTarget{0.01f};
 };
