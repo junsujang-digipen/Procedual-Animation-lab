@@ -6,7 +6,12 @@
 
 PA_Scene::PA_Scene(sf::RenderWindow* window) : _window(window), obj(std::make_unique<DDLongLegs>(sf::Vector2f{},6))
 {
-	obj->SetTarget(static_cast<sf::Vector2f>(_window->getSize())/2.f);
+	auto winSize{ static_cast<sf::Vector2f>(_window->getSize()) };
+	obj->SetTarget(winSize/2.f);
+
+	// set coordinate origin position to bottom-left
+	sf::View view{ winSize / 2.f,{winSize.x, -winSize.y} };
+	_window->setView(view);
 
 	b2WorldDef world = b2DefaultWorldDef();
 	world.gravity = b2Vec2(0.f,-9.8f);
@@ -21,13 +26,13 @@ PA_Scene::PA_Scene(sf::RenderWindow* window) : _window(window), obj(std::make_un
 
 PA_Scene::~PA_Scene()
 {
-
+	_window->setView(_window->getDefaultView());
 }
 
 void PA_Scene::UpdateImGui()
 {
 	ImGui::Begin("It's Tentacle creature simulation!");
-	ImGui::SetWindowSize({ 300,200 });
+	ImGui::SetWindowSize({ 300,250 });
 	ImGui::Text("Tentacle creature!!");
 	if (ImGui::Button("Searching holdable point")) {
 		// reset holdable points
@@ -39,6 +44,10 @@ void PA_Scene::UpdateImGui()
 	ImGui::SliderFloat("Pushing power", &obj->pushingPower, 0.f, 5.f);
 	ImGui::InputFloat("Probability of re-searching holdable points", &obj->probabilityResetTarget);
 	ImGui::Text("Click to set target position!");
+	auto mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(*_window));
+	ImGui::Text(std::format("Mouse Position: ({}, {})", mousePos.x, mousePos.y).c_str());
+	auto mousePosToCoords = _window->mapPixelToCoords(sf::Mouse::getPosition(*_window));
+	ImGui::Text(std::format("Mouse Position in Coords: ({}, {})", mousePosToCoords.x, mousePosToCoords.y).c_str());
 	ImGui::End();
 }
 
@@ -56,8 +65,7 @@ void PA_Scene::Draw()
 void PA_Scene::Update(const float dt)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-		auto mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(*_window));
-		obj->SetTarget(mousePos);
+		obj->SetTarget(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window)));
 	}
 	obj->Update(dt);
 }
