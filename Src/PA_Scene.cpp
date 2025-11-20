@@ -16,12 +16,22 @@ PA_Scene::PA_Scene(sf::RenderWindow* window) : _window(window), obj(std::make_un
 	b2WorldDef world = b2DefaultWorldDef();
 	world.gravity = b2Vec2(0.f,-9.8f);
 	_worldId = b2CreateWorld(&world);
+
+	// ground
 	b2BodyDef groundBodyDef = b2DefaultBodyDef();
-	groundBodyDef.position = b2Vec2(0.0f, -10.0f );
-	b2BodyId groundId = b2CreateBody(_worldId, &groundBodyDef);
+	groundBodyDef.position = b2Vec2(400.0f, 300.0f );
+	ground._bodyId = b2CreateBody(_worldId, &groundBodyDef);
 	b2Polygon groundBox = b2MakeBox(50.0f, 10.0f);
 	b2ShapeDef groundShapeDef = b2DefaultShapeDef();
-	b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+	ground._shapeId = b2CreatePolygonShape(ground._bodyId, &groundShapeDef, &groundBox);
+	// ball
+	b2BodyDef ballBodyDef = b2DefaultBodyDef();
+	ballBodyDef.type = b2_dynamicBody;
+	ballBodyDef.position = b2Vec2(400.0f, 400.0f);
+	ball._bodyId = b2CreateBody(_worldId, &ballBodyDef);
+	b2Circle ballBox{ {}, 10.0f };
+	b2ShapeDef ballShapeDef = b2DefaultShapeDef();
+	ball._shapeId = b2CreateCircleShape(ball._bodyId, &ballShapeDef, &ballBox);
 }
 
 PA_Scene::~PA_Scene()
@@ -53,17 +63,28 @@ void PA_Scene::UpdateImGui()
 
 void PA_Scene::Draw()
 {
-	sf::RectangleShape ground{};
-	ground.setSize({50.f,10.f});
-	ground.setPosition({ 400.f,300.f });
-	ground.setFillColor(sf::Color::White);
-	_window->draw(ground);
+	sf::RectangleShape groundshape{};
+	groundshape.setSize({50.f,10.f});
+	groundshape.setPosition({ 400.f,300.f });
+	groundshape.setFillColor(sf::Color::White);
+	_window->draw(groundshape);
+
+
+	sf::CircleShape ballShape{};
+	auto ballpos = b2Body_GetPosition(ball._bodyId);
+	ballShape.setPosition({ ballpos.x, ballpos.y });
+	auto ballData = b2Shape_GetCircle(ball._shapeId);
+	ballShape.setRadius(ballData.radius);
+	ballShape.setOrigin({ballData.radius,ballData.radius});
+	_window->draw(ballShape);
+
 
 	obj->Draw(_window);
 }
 
 void PA_Scene::Update(const float dt)
 {
+	b2World_Step(_worldId,dt,4);
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 		obj->SetTarget(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window)));
 	}

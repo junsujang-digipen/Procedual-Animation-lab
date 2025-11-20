@@ -9,6 +9,12 @@ class PA_Scene : public Scene {
 	sf::RenderWindow* _window{};
 	std::unique_ptr<DDLongLegs> obj{};
 
+	struct Object {
+		b2BodyId _bodyId{};
+		b2ShapeId _shapeId{};
+	};
+	Object ground{};
+	Object ball{};
 	b2WorldId  _worldId;
 public:
 	PA_Scene(sf::RenderWindow* window);
