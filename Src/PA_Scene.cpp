@@ -32,10 +32,15 @@ PA_Scene::PA_Scene(sf::RenderWindow* window) : _window(window), obj(std::make_un
 	b2Circle ballBox{ {}, 10.0f };
 	b2ShapeDef ballShapeDef = b2DefaultShapeDef();
 	ball._shapeId = b2CreateCircleShape(ball._bodyId, &ballShapeDef, &ballBox);
+
+	// setup physics body
+
 }
 
 PA_Scene::~PA_Scene()
 {
+	b2DestroyWorld(_worldId);
+	_worldId = b2_nullWorldId;
 	_window->setView(_window->getDefaultView());
 }
 
@@ -84,9 +89,9 @@ void PA_Scene::Draw()
 
 void PA_Scene::Update(const float dt)
 {
-	b2World_Step(_worldId,dt,4);
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 		obj->SetTarget(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window)));
 	}
 	obj->Update(dt);
+	b2World_Step(_worldId,dt,4);
 }

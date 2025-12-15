@@ -41,6 +41,15 @@ int main() {
 				window.close();
 			}
 		}
+		// update logic
+		currentScene->Update(dt);
+		//? Physics
+
+		// rendering
+		window.clear(sf::Color::Black);
+		currentScene->Draw();
+		ImGui::SFML::Render(window);
+		window.display();
 		// ImGui update
 		ImGui::SFML::Update(window, sf::seconds(dt));
 		ImGui::BeginMainMenuBar();
@@ -51,18 +60,9 @@ int main() {
 		}
 		ImGui::EndMainMenuBar();
 		currentScene->UpdateImGui();
-		//? Physics
-		// rendering
-		window.clear(sf::Color::Black);
-		currentScene->Draw();
-		ImGui::SFML::Render(window);
-		window.display();
-
-		// update logic
-		currentScene->Update(dt);
+		// update delta time
 		dt = (clock.getElapsedTime() - frameStartTime).asSeconds();
 		++frameCount;
-
 	}
 	ImGui::SFML::Shutdown();
 	return 0;
