@@ -4,7 +4,7 @@
 #include <imgui.h>
 #include <box2d/box2d.h>
 
-PA_Scene::PA_Scene(sf::RenderWindow* window) : _window(window), obj(std::make_unique<DDLongLegs>(sf::Vector2f{},6))
+PA_Scene::PA_Scene(sf::RenderWindow* window) : _window(window), obj(std::make_unique<DDLongLegs>(sf::Vector2f{},8))
 {
 	auto winSize{ static_cast<sf::Vector2f>(_window->getSize()) };
 	obj->SetTarget(winSize/2.f);
@@ -33,7 +33,7 @@ PA_Scene::PA_Scene(sf::RenderWindow* window) : _window(window), obj(std::make_un
 	b2ShapeDef ballShapeDef = b2DefaultShapeDef();
 	ball._shapeId = b2CreateCircleShape(ball._bodyId, &ballShapeDef, &ballBox);
 
-	// setup physics body
+	//? setup physics body
 
 }
 
@@ -90,7 +90,11 @@ void PA_Scene::Draw()
 void PA_Scene::Update(const float dt)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-		obj->SetTarget(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window)));
+		auto winSize{ static_cast<sf::Vector2f>(_window->getSize()) };
+		auto mousePos = sf::Mouse::getPosition(*_window);
+		// restrict available target position
+		if(mousePos.x > 0 && mousePos.x < winSize.x && mousePos.y > 0 && mousePos.y < winSize.y)
+			obj->SetTarget(_window->mapPixelToCoords(mousePos));
 	}
 	obj->Update(dt);
 	b2World_Step(_worldId,dt,4);
